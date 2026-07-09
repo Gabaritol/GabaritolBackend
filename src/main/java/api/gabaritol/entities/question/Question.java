@@ -4,8 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import api.gabaritol.entities.enums.Difficulty;
-import api.gabaritol.entities.enums.QuestionType;
+import api.gabaritol.entities.exam.Difficulty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

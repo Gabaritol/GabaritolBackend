@@ -1,4 +1,4 @@
-package api.gabaritol.entities.enums;
+package api.gabaritol.entities.user;
 
 public enum Role {
     USER,

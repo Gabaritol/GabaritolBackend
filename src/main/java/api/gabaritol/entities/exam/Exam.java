@@ -7,8 +7,6 @@ import java.util.UUID;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
-import api.gabaritol.entities.enums.Difficulty;
-import api.gabaritol.entities.enums.ExamStatus;
 import api.gabaritol.entities.question.ExamQuestion;
 import api.gabaritol.entities.source.Source;
 import api.gabaritol.entities.user.User;
