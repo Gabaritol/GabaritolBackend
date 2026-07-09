@@ -4,9 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import javax.xml.transform.Source;
-
-import org.aspectj.weaver.patterns.TypePatternQuestions.Question;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import api.gabaritol.entities.enums.Difficulty;
 import api.gabaritol.entities.enums.ExamStatus;
@@ -19,8 +18,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity
+@Getter
+@Setter
 public class Exam {
     @Id 
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -48,5 +51,8 @@ public class Exam {
     @OneToMany(mappedBy = "exam")
     private List<Source> sources;
 
+    @CreatedDate
     private LocalDateTime createdAt;
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 }
