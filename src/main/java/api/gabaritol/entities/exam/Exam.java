@@ -1,4 +1,4 @@
-package api.gabaritol.entities;
+package api.gabaritol.entities.exam;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -9,6 +9,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 
 import api.gabaritol.entities.enums.Difficulty;
 import api.gabaritol.entities.enums.ExamStatus;
+import api.gabaritol.entities.question.ExamQuestion;
+import api.gabaritol.entities.source.Source;
+import api.gabaritol.entities.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -46,7 +49,7 @@ public class Exam {
     private ExamStatus status;
 
     @OneToMany(mappedBy = "exam", cascade = CascadeType.ALL)
-    private List<Question> questions;
+    private List<ExamQuestion> examQuestions;
 
     @OneToMany(mappedBy = "exam")
     private List<Source> sources;

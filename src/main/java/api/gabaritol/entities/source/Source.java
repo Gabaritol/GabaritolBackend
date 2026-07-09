@@ -1,4 +1,4 @@
-package api.gabaritol.entities;
+package api.gabaritol.entities.source;
 
 import jakarta.persistence.Entity;
 
