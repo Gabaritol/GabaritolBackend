@@ -1,12 +1,9 @@
 package api.gabaritol.entities.exam;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+import api.gabaritol.entities.common.BaseEntity;
 import api.gabaritol.entities.question.ExamQuestion;
 import api.gabaritol.entities.source.Source;
 import api.gabaritol.entities.user.User;
@@ -25,7 +22,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Exam {
+public class Exam extends BaseEntity {
     @Id 
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -52,8 +49,4 @@ public class Exam {
     @OneToMany(mappedBy = "exam")
     private List<Source> sources;
 
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

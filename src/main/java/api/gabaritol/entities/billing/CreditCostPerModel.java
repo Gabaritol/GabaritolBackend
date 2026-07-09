@@ -1,11 +1,8 @@
 package api.gabaritol.entities.billing;
 
-import java.time.LocalDateTime;
 import java.util.UUID;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+import api.gabaritol.entities.common.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -19,7 +16,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class CreditCostPerModel {
+public class CreditCostPerModel extends BaseEntity {
     @Id 
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -33,9 +30,4 @@ public class CreditCostPerModel {
     private Integer creditCostPerQuestion;
 
     private Boolean active;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }

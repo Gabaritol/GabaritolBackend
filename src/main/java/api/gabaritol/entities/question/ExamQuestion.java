@@ -1,13 +1,29 @@
 package api.gabaritol.entities.question;
 
-import java.time.LocalDateTime;
+import java.util.UUID;
+import api.gabaritol.entities.common.BaseEntity;
+import api.gabaritol.entities.exam.Exam;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import lombok.Getter;
+import lombok.Setter;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+@Entity
+@Getter
+@Setter
+public class ExamQuestion extends BaseEntity {
+    @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
-public class ExamQuestion {
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
+    @ManyToOne
+    private Exam exam;
+
+    @ManyToOne
+    private Question question;
+
+    private Integer orderInExam;
 }

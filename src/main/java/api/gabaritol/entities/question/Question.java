@@ -1,12 +1,9 @@
 package api.gabaritol.entities.question;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-
+import api.gabaritol.entities.common.BaseEntity;
 import api.gabaritol.entities.exam.Difficulty;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -23,7 +20,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-public class Question {
+public class Question extends BaseEntity {
     @Id 
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
@@ -57,9 +54,4 @@ public class Question {
 
     private Integer timesUsed;
     private String contentHash;
-
-    @CreatedDate
-    private LocalDateTime createdAt;
-    @LastModifiedDate
-    private LocalDateTime updatedAt;
 }
