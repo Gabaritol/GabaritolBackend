@@ -46,8 +46,16 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Exam> exams;
 
+    public void increaseVerificationAttempts() {
+        this.verificationAttempts++;
+    }
+
     public boolean isVerificationCodeExpired() {
         if (this.codeExpiresAt == null) return true;
         return LocalDateTime.now().isAfter(this.codeExpiresAt);
+    }
+
+    public boolean requiresPassword() {
+        return this.plan != null && this.plan != PlanType.FREE;
     }
 }
