@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Verifique seu email</title>
+        <style>
+            .IbmPlexMono {
+                font-family:
+                    IBM Plex Mono,
+                    monospace;
+                font-optical-sizing: auto;
+                font-style: normal;
+            }
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+                font-family: Arial, sans-serif;
+            }
+            body {
+                background: #f4f4f4;
+                padding: 2rem 1rem;
+            }
+            .container {
+                max-width: 520px;
+                margin: 0 auto;
+                background: #fff;
+                border-radius: 12px;
+                overflow: hidden;
+                border: 1px solid #e5e5e5;
+            }
+            .header {
+                background: #1a1a2e;
+                padding: 2rem;
+                text-align: center;
+            }
+            .header .icon {
+                width: 48px;
+                height: 48px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 10px;
+                margin: 0 auto 1rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 24px;
+            }
+            .header p {
+                color: rgba(255, 255, 255, 0.5);
+                font-size: 12px;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+            .body {
+                padding: 2rem 2.5rem;
+            }
+            .body h1 {
+                font-size: 20px;
+                font-weight: 500;
+                color: #1a1a1a;
+                margin-bottom: 0.5rem;
+            }
+            .body .desc {
+                font-size: 14px;
+                color: #666;
+                line-height: 1.6;
+                margin-bottom: 2rem;
+            }
+            .code-box {
+                background: #f9f9f9;
+                border: 1px solid #e5e5e5;
+                border-radius: 8px;
+                padding: 1.5rem;
+                text-align: center;
+                margin-bottom: 2rem;
+            }
+            .code-box .label {
+                font-size: 11px;
+                color: #999;
+                letter-spacing: 0.06em;
+                text-transform: uppercase;
+                margin-bottom: 0.5rem;
+            }
+            .code-box .code {
+                font-size: 36px;
+                font-weight: 500;
+                color: #1a1a1a;
+                letter-spacing: 0.2em;
+                font-family: monospace;
+            }
+            .body .notice {
+                font-size: 13px;
+                color: #999;
+                line-height: 1.6;
+            }
+            .footer {
+                border-top: 1px solid #e5e5e5;
+                padding: 1rem 2.5rem;
+                display: flex;
+                justify-content: space-between;
+            }
+            .footer p {
+                font-size: 12px;
+                color: #aaa;
+            }
+            .extra-bold {
+                font-weight: 900 !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="header IbmPlexMono">
+                <p style="font-size: large">
+                    Gabarito<span
+                        class="extra-bold"
+                        style="color: rgb(248, 172, 10)"
+                        >L</span
+                    >
+                </p>
+            </div>
+            <div class="body IbmPlexMono">
+                <h1>Verifique seu email</h1>
+                <p class="desc">
+                    Use o código abaixo para confirmar seu endereço de email.
+                    Ele expira em <strong>15 minutos</strong>.
+                </p>
+                <div class="code-box">
+                    <p class="label">Código de verificação</p>
+                    <p class="code extra-bold" th:text="${verificationCode}">
+                        hT146X
+                    </p>
+                </div>
+                <p class="notice">
+                    Se você não criou uma conta no GabaritoL, ignore este email
+                    com segurança.
+                </p>
+            </div>
+            <div class="footer IbmPlexMono">
+                <p>© 2026 GabaritoL</p>
+                <p>Não responda este email</p>
+            </div>
+        </div>
+    </body>
+</html>
