@@ -1,5 +1,6 @@
 package api.gabaritol.services.user;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,12 @@ public class UserService {
     private final TokenGenerator generator;
     private final EmailService emailService;
 
+    private void issueVerificationCode(User user) {
+        user.setVerificationCode(generator.generateToken());
+        user.setCodeExpiresAt(LocalDateTime.now().plusMinutes(CODE_EXPIRATION_MINUTES));
+        user.setVerificationAttempts(0);
+    }
+
     public User register(String email) {
         User user = userRepository.findByEmail(email).orElseGet(User::new);
 
@@ -36,11 +43,20 @@ public class UserService {
         user.setPlan(PlanType.FREE);
         user.setAvailableCredits(0);
 
-        user.setVerificationCode(generator.generateToken());
+        issueVerificationCode(user);
 
         User saved = userRepository.save(user);
         emailService.sendVerificationCode(saved.getEmail(), saved.getVerificationCode());
         return saved;
+    }
+
+    public void requestLoginCode(String email) {
+        User user = userRepository.findByEmail(email)
+            .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        issueVerificationCode(user);
+        userRepository.save(user);
+        emailService.sendVerificationCode(user.getEmail(), user.getVerificationCode());
     }
 
     public User verifyCode(String email, String submittedCode) {
@@ -61,19 +77,14 @@ public class UserService {
             throw new IllegalArgumentException("Invalid verification code.");
         }
 
-        user.setVerified(true);
+        if (!user.isVerified()) {
+            user.setVerified(true);
+        }
+
         user.setVerificationCode(null);
         user.setCodeExpiresAt(null);
+        user.setVerificationAttempts(0);
         return userRepository.save(user);
-    }
-
-    public void requestLoginCode(String email) {
-        User user = userRepository.findByEmail(email)
-            .orElseThrow(() -> new IllegalArgumentException("User not found."));
-
-        user.setVerificationCode(generator.generateToken());
-        userRepository.save(user);
-        emailService.sendVerificationCode(user.getEmail(), user.getVerificationCode());
     }
 
     public User loginWithPassword(String email, String rawPassword) {
