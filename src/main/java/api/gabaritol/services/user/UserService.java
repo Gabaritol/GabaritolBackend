@@ -1,7 +1,5 @@
 package api.gabaritol.services.user;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
