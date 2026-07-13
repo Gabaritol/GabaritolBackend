@@ -10,5 +10,5 @@ public record VerifyCodeRequestDTO(
 
     @NotBlank
     @Size(min = 5, max = 5, message = "Code must be 5 characters")
-    String code
+    String code 
 ) {}

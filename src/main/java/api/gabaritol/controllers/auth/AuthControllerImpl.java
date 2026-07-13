@@ -1,5 +1,6 @@
 package api.gabaritol.controllers.auth;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,24 +23,24 @@ public class AuthControllerImpl implements AuthController {
     @Override
     public ResponseEntity<Void> register(RegisterRequestDTO request) {
         userService.register(request.email());
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @Override
     public ResponseEntity<ResponseLoginUserDTO> loginWithCode(VerifyCodeRequestDTO request) {
         ResponseLoginUserDTO response = authService.loginWithCode(request.email(), request.code());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
     public ResponseEntity<ResponseLoginUserDTO> loginWithPassword(LoginPasswordRequestDTO request) {
         ResponseLoginUserDTO response = authService.loginWithPassword(request.email(), request.password());
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok().body(response);
     }
 
     @Override
     public ResponseEntity<Void> requestLoginCode(LoginCodeRequestDTO request) {
         userService.requestLoginCode(request.email());
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
