@@ -31,7 +31,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(String email) {
+    public void register(String email) {
         User user = userRepository.findByEmail(email).orElseGet(User::new);
 
         if (Boolean.TRUE.equals(user.isVerified())) {
@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
 
         User saved = userRepository.save(user);
         emailService.sendVerificationCode(saved.getEmail(), saved.getVerificationCode());
-        return saved;
     }
 
     @Override
