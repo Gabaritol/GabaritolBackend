@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import api.gabaritol.exceptions.raises.MessagingMailFailed;
+import api.gabaritol.exceptions.raises.TokenException;
 
 
 @RestControllerAdvice
@@ -40,6 +41,13 @@ public class CustomExceptionHandler {
         Map<String, String> error = new HashMap<>();
         error.put("error", cause.getMessage());
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(TokenException.class)
+    public ResponseEntity<Map<String, String>> tokenException(TokenException cause) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", cause.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(IllegalStateException.class)

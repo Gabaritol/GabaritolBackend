@@ -18,6 +18,7 @@ import api.gabaritol.services.auth.TokenService;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -31,11 +32,11 @@ public class SecurityFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        var token =  this.recoverToken(request);
-        var login = tokenService.validateToken(token);
+        var token = this.recoverToken(request);
+        var userId = tokenService.validateToken(token);
 
-        if (login != null) {
-            userRepository.findByUsername(login).ifPresent(user -> {
+        if (userId != null) {
+            userRepository.findById(UUID.fromString(userId)).ifPresent(user -> {
                 var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
                 var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(authentication);

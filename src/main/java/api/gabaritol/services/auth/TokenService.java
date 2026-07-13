@@ -1,14 +1,15 @@
 package api.gabaritol.services.auth;
 
+import api.gabaritol.entities.user.User;
+import api.gabaritol.exceptions.raises.TokenException;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-
-import api.gabaritol.entities.user.User;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -22,20 +23,20 @@ public class TokenService {
     private String secret;
 
     public String generateToken(User user) {
-        log.info("Generating security token for user: {}", user.getUsername());
+        log.info("Generating security token for user: {}", user.getId());
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
-                    .withIssuer("login-auth-api")
-                    .withSubject(user.getUsername())
+                    .withIssuer("gabaritol-api")
+                    .withSubject(user.getId().toString())
                     .withExpiresAt(this.generateExpirationDate())
                     .sign(algorithm);
 
-            log.info("Token successfully generated for user: {}", user.getUsername());
+            log.info("Token successfully generated for user: {}", user.getId());
             return token;
 
         } catch (JWTCreationException e) {
-            log.error("Critical error during token creation for user: {}", user.getUsername(), e);
+            log.error("Critical error during token creation for user: {}", user.getId(), e);
             throw new TokenException("Error while authenticating");
         }
     }
