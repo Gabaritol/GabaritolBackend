@@ -4,6 +4,11 @@
             "name": "app.cors.allowed-origins",
             "type": "java.lang.String",
             "description": "Allowed origins for CORS requests. This property should be a comma-separated list of allowed origins."
+        },
+        {
+            "name": "api.security.token.secret",
+            "type": "java.lang.String",
+            "description": "Secret key used for signing and verifying JWT tokens. This property should be set to a secure value."
         }
     ]
 }
