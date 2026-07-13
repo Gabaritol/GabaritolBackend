@@ -1,26 +1,26 @@
 package api.gabaritol.exceptions;
 
-import java.nio.file.AccessDeniedException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import api.gabaritol.exceptions.raises.MessagingMailFailed;
-import api.gabaritol.exceptions.raises.TokenException;
-
+import api.gabaritol.exceptions.raises.*;
+import lombok.extern.slf4j.Slf4j;
 
 @RestControllerAdvice
+@Slf4j
 public class CustomExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleGenericException(Exception ex) {
+        log.error("Unhandled exception", ex);
         Map<String, String> error = new HashMap<>();
-        error.put("error", "Internal server error " + ex);
+        error.put("error", "Internal server error");
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
@@ -75,6 +75,6 @@ public class CustomExceptionHandler {
     public ResponseEntity<Map<String, String>> messagingException(MessagingMailFailed cause) {
         Map<String, String> error = new HashMap<>();
         error.put("error", cause.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
