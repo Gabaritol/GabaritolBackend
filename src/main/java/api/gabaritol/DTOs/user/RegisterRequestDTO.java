@@ -1,3 +1,10 @@
 package api.gabaritol.DTOs.user;
 
-public record RegisterRequestDTO(String email) {}
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record RegisterRequestDTO(
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    String email
+) {}

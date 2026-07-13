@@ -1,3 +1,13 @@
 package api.gabaritol.DTOs.user;
 
-public record LoginPasswordRequestDTO(String email, String password) {}
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+public record LoginPasswordRequestDTO(
+    @NotBlank 
+    @Email
+    String email,
+
+    @NotBlank
+    String password
+) {}
