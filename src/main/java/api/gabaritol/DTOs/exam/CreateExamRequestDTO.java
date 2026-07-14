@@ -15,7 +15,7 @@ public record CreateExamRequestDTO(
     @NotBlank(message = "Topic is required")
     String topic,
 
-    String position, // optional
+    String position,
 
     @NotNull(message = "Difficulty is required")
     Difficulty difficulty,
