@@ -22,12 +22,14 @@ public class TokenService {
     @Value("${api.security.token.secret}")
     private String secret;
 
+    private static final String ISSUER = "gabaritol-api";
+
     public String generateToken(User user) {
         log.info("Generating security token for user: {}", user.getId());
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create()
-                    .withIssuer("gabaritol-api")
+                    .withIssuer(ISSUER)
                     .withSubject(user.getId().toString())
                     .withExpiresAt(this.generateExpirationDate())
                     .sign(algorithm);
@@ -46,7 +48,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
             String subject = JWT.require(algorithm)
-                    .withIssuer("login-auth-api")
+                    .withIssuer(ISSUER)
                     .build()
                     .verify(token)
                     .getSubject();
