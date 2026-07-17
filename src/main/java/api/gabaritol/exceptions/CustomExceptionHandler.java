@@ -24,6 +24,13 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
+    @ExceptionHandler(FileProcessingException.class)
+    public ResponseEntity<Map<String, String>> fileProcessingException(FileProcessingException cause) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", cause.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.UNPROCESSABLE_CONTENT);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String, String>> onValidationError(
             MethodArgumentNotValidException ex) {
