@@ -19,6 +19,26 @@
             "name": "spring.mail.port",
             "type": "java.lang.String",
             "description": "SMTP server port number for sending emails (e.g., 587 for TLS, 465 for SSL, 25 for plain text)"
+        },
+        {
+            "name": "spring.mail.username",
+            "type": "java.lang.String",
+            "description": "Username for authentication with the SMTP server when sending mail."
+        },
+        {
+            "name": "spring.mail.password",
+            "type": "java.lang.String",
+            "description": "Password used to authenticate with the SMTP server when sending email. Keep this value secure and do not expose it in version control."
+        },
+        {
+            "name": "spring.mail.properties.mail.smtp.auth",
+            "type": "java.lang.String",
+            "description": "Enable SMTP authentication for the mail server. Set to true when the SMTP server requires username/password login."
+        },
+        {
+            "name": "spring.mail.properties.mail.smtp.starttls.enable",
+            "type": "java.lang.String",
+            "description": "Enable STARTTLS encryption for SMTP connections. Set to true to use TLS if the mail server supports it for secure email transport."
         }
     ]
 }
