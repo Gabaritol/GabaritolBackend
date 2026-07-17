@@ -9,6 +9,16 @@
             "name": "api.security.token.secret",
             "type": "java.lang.String",
             "description": "Secret key used for signing and verifying JWT tokens. This property should be set to a secure value."
+        },
+        {
+            "name": "spring.mail.host",
+            "type": "java.lang.String",
+            "description": "SMTP server host address for sending emails (e.g., smtp.gmail.com, mail.example.com)"
+        },
+        {
+            "name": "spring.mail.port",
+            "type": "java.lang.String",
+            "description": "SMTP server port number for sending emails (e.g., 587 for TLS, 465 for SSL, 25 for plain text)"
         }
     ]
 }
