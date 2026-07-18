@@ -8,17 +8,21 @@ import org.springframework.stereotype.Component;
 import api.gabaritol.ai.gemini.GeneratedQuestionDTO;
 import api.gabaritol.ai.gemini.GeneratedQuestionsBatchDTO;
 import api.gabaritol.ai.generation.QuestionGeneratorService;
-import api.gabaritol.entities.exam.*;
+import api.gabaritol.entities.exam.Exam;
+import api.gabaritol.entities.exam.ExamStatus;
 import api.gabaritol.entities.generation.GenerationJob;
 import api.gabaritol.entities.generation.JobStatus;
 import api.gabaritol.entities.question.AnswerOption;
-import api.gabaritol.entities.question.*;
+import api.gabaritol.entities.question.ExamQuestion;
+import api.gabaritol.entities.question.Question;
+import api.gabaritol.entities.question.QuestionType;
 import api.gabaritol.entities.source.Source;
 import api.gabaritol.exceptions.raises.NotFoundException;
 import api.gabaritol.repositories.exam.ExamRepository;
 import api.gabaritol.repositories.generation.GenerationJobRepository;
 import api.gabaritol.repositories.question.AnswerOptionRepository;
-import api.gabaritol.repositories.question.*;
+import api.gabaritol.repositories.question.ExamQuestionRepository;
+import api.gabaritol.repositories.question.QuestionRepository;
 import api.gabaritol.repositories.source.SourceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,30 +58,57 @@ public class AsyncGenerationWorker {
         examRepository.save(exam);
 
         try {
-            String referenceContent = buildReferenceContent(exam);
-
-            GeneratedQuestionsBatchDTO batch = questionGeneratorService.generateQuestions(
-                exam.getTopic(), exam.getBoard(), exam.getDifficulty(),
-                exam.getQuestionCount(), referenceContent
-            );
-
             int order = 1;
             int generatedCount = 0;
 
-            for (GeneratedQuestionDTO generated : batch.questions()) {
-                Question question = buildQuestionEntity(generated, exam);
-                Question savedQuestion = questionRepository.save(question);
+            List<Question> reusableQuestions = questionRepository
+                .findByTopicAndBoardAndDifficultyAndApprovedTrue(
+                    exam.getTopic(), exam.getBoard(), exam.getDifficulty()
+                );
 
-                List<AnswerOption> options = generated.options().stream()
-                    .map(opt -> buildAnswerOption(opt, savedQuestion))
-                    .collect(Collectors.toList());
-                answerOptionRepository.saveAll(options);
+            int neededCount = exam.getQuestionCount();
+            int reusableToUse = Math.min(reusableQuestions.size(), neededCount);
 
-                linkQuestionToExam(exam, savedQuestion, order++);
+            log.info("Exam {}: found {} reusable questions, using {}, need {} total.",
+                examId, reusableQuestions.size(), reusableToUse, neededCount);
+
+            for (int i = 0; i < reusableToUse; i++) {
+                Question reused = reusableQuestions.get(i);
+                reused.setTimesUsed(reused.getTimesUsed() + 1);
+                questionRepository.save(reused);
+
+                linkQuestionToExam(exam, reused, order++);
 
                 generatedCount++;
                 job.setQuestionsGenerated(generatedCount);
                 generationJobRepository.save(job);
+            }
+
+            int remaining = neededCount - reusableToUse;
+
+            if (remaining > 0) {
+                String referenceContent = buildReferenceContent(exam);
+
+                GeneratedQuestionsBatchDTO batch = questionGeneratorService.generateQuestions(
+                    exam.getTopic(), exam.getBoard(), exam.getDifficulty(),
+                    remaining, referenceContent
+                );
+
+                for (GeneratedQuestionDTO generated : batch.questions()) {
+                    Question question = buildQuestionEntity(generated, exam);
+                    Question savedQuestion = questionRepository.save(question);
+
+                    List<AnswerOption> options = generated.options().stream()
+                        .map(opt -> buildAnswerOption(opt, savedQuestion))
+                        .collect(Collectors.toList());
+                    answerOptionRepository.saveAll(options);
+
+                    linkQuestionToExam(exam, savedQuestion, order++);
+
+                    generatedCount++;
+                    job.setQuestionsGenerated(generatedCount);
+                    generationJobRepository.save(job);
+                }
             }
 
             exam.setStatus(ExamStatus.COMPLETED);
@@ -87,7 +118,8 @@ public class AsyncGenerationWorker {
             job.setFinishedAt(LocalDateTime.now());
             generationJobRepository.save(job);
 
-            log.info("Exam {} generated successfully with {} questions.", examId, batch.questions().size());
+            log.info("Exam {} completed: {} reused, {} generated via AI.",
+                examId, reusableToUse, remaining);
 
         } catch (Exception e) {
             log.error("Failed to generate questions for exam {}", examId, e);
