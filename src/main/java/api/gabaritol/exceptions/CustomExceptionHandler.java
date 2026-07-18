@@ -25,6 +25,13 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
+    @ExceptionHandler(AIProviderException.class)
+    public ResponseEntity<Map<String, String>> aiProviderException(AIProviderException cause) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", cause.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(FileProcessingException.class)
     public ResponseEntity<Map<String, String>> fileProcessingException(FileProcessingException cause) {
         Map<String, String> error = new HashMap<>();
