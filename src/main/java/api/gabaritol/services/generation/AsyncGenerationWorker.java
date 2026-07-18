@@ -3,6 +3,8 @@ package api.gabaritol.services.generation;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.springframework.data.domain.PageRequest;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import api.gabaritol.ai.gemini.GeneratedQuestionDTO;
@@ -45,10 +47,14 @@ public class AsyncGenerationWorker {
     @Async
     public void process(UUID jobId, UUID examId) {
         GenerationJob job = generationJobRepository.findById(jobId)
-            .orElseThrow(() -> new NotFoundException("Generation job not found."));
+            .orElseThrow(
+                () -> new NotFoundException("Generation job not found.")
+        );
 
         Exam exam = examRepository.findById(examId)
-            .orElseThrow(() -> new NotFoundException("Exam not found."));
+            .orElseThrow(
+                () -> new NotFoundException("Exam not found.")
+        );
 
         job.setStatus(JobStatus.GENERATING);
         job.setStartedAt(LocalDateTime.now());
@@ -60,17 +66,20 @@ public class AsyncGenerationWorker {
         try {
             int order = 1;
             int generatedCount = 0;
+            int neededCount = exam.getQuestionCount();
 
             List<Question> reusableQuestions = questionRepository
-                .findByTopicAndBoardAndDifficultyAndApprovedTrue(
-                    exam.getTopic(), exam.getBoard(), exam.getDifficulty()
-                );
+                .findByTopicAndBoardAndDifficultyAndApprovedTrueOrderByTimesUsedAsc(
+                    exam.getTopic(), 
+                    exam.getBoard(), 
+                    exam.getDifficulty(), 
+                    PageRequest.of(0, neededCount
+                )
+            );
 
-            int neededCount = exam.getQuestionCount();
-            int reusableToUse = Math.min(reusableQuestions.size(), neededCount);
-
-            log.info("Exam {}: found {} reusable questions, using {}, need {} total.",
-                examId, reusableQuestions.size(), reusableToUse, neededCount);
+            int reusableToUse = reusableQuestions.size();
+                
+            log.info("Exam {}: found {} reusable questions, using {}, need {} total.", examId, reusableQuestions.size(), reusableToUse, neededCount);
 
             for (int i = 0; i < reusableToUse; i++) {
                 Question reused = reusableQuestions.get(i);
@@ -118,8 +127,7 @@ public class AsyncGenerationWorker {
             job.setFinishedAt(LocalDateTime.now());
             generationJobRepository.save(job);
 
-            log.info("Exam {} completed: {} reused, {} generated via AI.",
-                examId, reusableToUse, remaining);
+            log.info("Exam {} completed: {} reused, {} generated via AI.", examId, reusableToUse, remaining);
 
         } catch (Exception e) {
             log.error("Failed to generate questions for exam {}", examId, e);
