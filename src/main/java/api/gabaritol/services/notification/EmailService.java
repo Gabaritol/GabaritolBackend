@@ -24,8 +24,6 @@ public class EmailService {
     private String fromEmail;
      
     public void sendVerificationCode(String email, String verificationCode) {
-        System.out.println("Sending verification code to " + email + ": " + verificationCode);
-        /**
         log.info("Sending verification email to {}", email);
         try {
             Context context = new Context();
@@ -45,7 +43,6 @@ public class EmailService {
         } catch (MailException | MessagingException e) {
             log.error("Failed to send verification email to {}", email, e);
             throw new RuntimeException("Failed to send verification email", e);
-        }
-        */
+        }  
     }
 }
