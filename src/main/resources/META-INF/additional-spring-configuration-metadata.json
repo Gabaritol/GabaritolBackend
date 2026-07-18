@@ -39,6 +39,16 @@
             "name": "spring.mail.properties.mail.smtp.starttls.enable",
             "type": "java.lang.String",
             "description": "Enable STARTTLS encryption for SMTP connections. Set to true to use TLS if the mail server supports it for secure email transport."
+        },
+        {
+            "name": "gemini.api.key",
+            "type": "java.lang.String",
+            "description": "API key used to authenticate requests to the Gemini service. Provide a valid key to enable secure, authorized access."
+        },
+        {
+            "name": "gemini.api.url",
+            "type": "java.lang.String",
+            "description": "Base URL for the Gemini API endpoint. Set this to the service URL used by the application to communicate with Gemini."
         }
     ]
 }
