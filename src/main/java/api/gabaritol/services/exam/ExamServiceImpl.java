@@ -30,13 +30,17 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = new Exam();
         exam.setUser(user);
         exam.setTitle(title);
-        exam.setBoard(board);
-        exam.setTopic(topic);
+        exam.setBoard(normalize(board));
+        exam.setTopic(normalize(topic));
         exam.setPosition(position);
         exam.setDifficulty(difficulty);
         exam.setQuestionCount(questionCount);
         exam.setStatus(ExamStatus.DRAFT);
         return examRepository.save(exam);
+    }
+
+    private String normalize(String value) {
+        return value == null ? null : value.trim().toUpperCase();
     }
 
     @Override
