@@ -34,4 +34,10 @@ public class GenerationOrchestratorServiceImpl implements GenerationOrchestrator
 
         return savedJob.getId();
     }
+
+    @Override
+    public GenerationJob findJobById(UUID jobId) {
+        return generationJobRepository.findById(jobId)
+            .orElseThrow(() -> new NotFoundException("Generation job not found."));
+    }
 }
