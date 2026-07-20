@@ -5,23 +5,25 @@ import java.util.UUID;
 import api.gabaritol.entities.question.Question;
 import api.gabaritol.entities.question.QuestionType;
 
-public record QuestionResponseDTO(
+public record QuestionWithAnswerResponseDTO(
     UUID id,
     String statement,
     QuestionType type,
-    List<AnswerOptionResponseDTO> options,
+    List<AnswerOptionWithAnswerResponseDTO> options,
+    String explanation,
     Integer order
 ) {
-    public static QuestionResponseDTO fromEntity(
+    public static QuestionWithAnswerResponseDTO fromEntity(
         Question question, 
-        List<AnswerOptionResponseDTO> options, 
+        List<AnswerOptionWithAnswerResponseDTO> options, 
         Integer order
     ) {
-        return new QuestionResponseDTO(
+        return new QuestionWithAnswerResponseDTO(
             question.getId(),
             question.getStatement(),
             question.getType(),
             options,
+            question.getExplanation(),
             order
         );
     }
