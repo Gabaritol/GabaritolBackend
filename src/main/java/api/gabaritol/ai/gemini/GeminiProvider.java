@@ -27,7 +27,6 @@ public class GeminiProvider implements AIProvider {
     @Override
     public String generateContent(String prompt) {
         log.info("Sending prompt to Gemini ({} chars)", prompt.length());
-
         try {
             GeminiRequestDTO request = GeminiRequestDTO.of(prompt);
 

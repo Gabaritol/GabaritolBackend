@@ -20,8 +20,12 @@ public class QuestionGeneratorService {
     private final ObjectMapper objectMapper;
 
     public GeneratedQuestionsBatchDTO generateQuestions(
-            String topic, String board, Difficulty difficulty,
-            int quantity, String referenceContent) {
+        String topic, 
+        String board, 
+        Difficulty difficulty,
+        int quantity, 
+        String referenceContent
+    ) {
 
         String prompt = buildPrompt(topic, board, difficulty, quantity, referenceContent);
         String rawResponse = aiProvider.generateContent(prompt);
@@ -35,8 +39,13 @@ public class QuestionGeneratorService {
         }
     }
 
-    private String buildPrompt(String topic, String board, Difficulty difficulty,
-                                int quantity, String referenceContent) {
+    private String buildPrompt(
+        String topic, 
+        String board, 
+        Difficulty difficulty,
+        int quantity, 
+        String referenceContent
+    ) {
         StringBuilder prompt = new StringBuilder();
         prompt.append("Você é um gerador de questões para concursos públicos brasileiros.\n");
         prompt.append("Gere ").append(quantity).append(" questões de múltipla escolha ");
