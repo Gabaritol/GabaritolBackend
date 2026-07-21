@@ -2,6 +2,7 @@ package api.gabaritol.entities.question;
 
 import java.util.UUID;
 import api.gabaritol.entities.common.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -24,6 +25,7 @@ public class AnswerOption extends BaseEntity {
     private Question question;
 
     private String label;
+    @Column(columnDefinition = "TEXT")
     private String text;
     private Boolean correct;
 }
