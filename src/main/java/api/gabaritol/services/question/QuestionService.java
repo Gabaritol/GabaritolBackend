@@ -1,9 +1,12 @@
 package api.gabaritol.services.question;
 
 import java.util.List;
+
+import api.gabaritol.DTOs.question.QuestionResponseDTO;
+import api.gabaritol.DTOs.question.QuestionWithAnswerResponseDTO;
 import api.gabaritol.entities.exam.Exam;
-import api.gabaritol.entities.question.ExamQuestion;
 
 public interface QuestionService {
-    List<ExamQuestion> findExamQuestionsByExam(Exam exam);
+    List<QuestionWithAnswerResponseDTO> findQuestionsWithAnswersByExam(Exam exam);
+    List<QuestionResponseDTO> findQuestionsByExam(Exam exam);
 }
