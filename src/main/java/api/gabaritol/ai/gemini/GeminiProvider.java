@@ -4,9 +4,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.util.retry.Retry;
 import api.gabaritol.ai.AIProvider;
 import api.gabaritol.exceptions.raises.AIProviderException;
 import lombok.extern.slf4j.Slf4j;
+
+import java.time.Duration;
 
 @Component
 @Slf4j
@@ -27,6 +31,7 @@ public class GeminiProvider implements AIProvider {
     @Override
     public String generateContent(String prompt) {
         log.info("Sending prompt to Gemini ({} chars)", prompt.length());
+
         try {
             GeminiRequestDTO request = GeminiRequestDTO.of(prompt);
 
@@ -37,6 +42,11 @@ public class GeminiProvider implements AIProvider {
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(GeminiResponseDTO.class)
+                .retryWhen(Retry.backoff(3, Duration.ofSeconds(2))
+                    .filter(this::isRetryable)
+                    .doBeforeRetry(signal ->
+                        log.warn("Retrying Gemini call, attempt {}", signal.totalRetries() + 1))
+                )
                 .block();
 
             if (response == null || response.candidates() == null || response.candidates().isEmpty()) {
@@ -51,5 +61,13 @@ public class GeminiProvider implements AIProvider {
             log.error("Error calling Gemini API", e);
             throw new AIProviderException("Failed to generate content with Gemini.");
         }
+    }
+
+    private boolean isRetryable(Throwable throwable) {
+        if (throwable instanceof WebClientResponseException ex) {
+            int status = ex.getStatusCode().value();
+            return status == 503 || status == 429 || status == 500;
+        }
+        return false;
     }
 }
