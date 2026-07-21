@@ -26,7 +26,6 @@ public class QuestionControllerImpl implements QuestionController {
         List<QuestionResponseDTO> result = questionService.findExamQuestionsByExam(exam).stream()
             .map(this::toResponseDTO)
             .toList();
-
         return ResponseEntity.ok(result);
     }
 
@@ -37,7 +36,6 @@ public class QuestionControllerImpl implements QuestionController {
         List<QuestionWithAnswerResponseDTO> result = questionService.findExamQuestionsByExam(exam).stream()
             .map(this::toResponseWithAnswerDTO)
             .toList();
-
         return ResponseEntity.ok(result);
     }
 

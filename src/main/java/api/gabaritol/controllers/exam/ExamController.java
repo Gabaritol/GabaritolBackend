@@ -5,8 +5,7 @@ import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import api.gabaritol.DTOs.exam.CreateExamRequestDTO;
-import api.gabaritol.DTOs.exam.ExamResponseDTO;
+import api.gabaritol.DTOs.exam.*;
 import api.gabaritol.entities.user.User;
 import jakarta.validation.Valid;
 

@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class QuestionServiceImpl implements QuestionService {
-
     private final ExamQuestionRepository examQuestionRepository;
 
     @Override

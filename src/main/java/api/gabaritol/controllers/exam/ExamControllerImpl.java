@@ -4,8 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
-import api.gabaritol.DTOs.exam.CreateExamRequestDTO;
-import api.gabaritol.DTOs.exam.ExamResponseDTO;
+import api.gabaritol.DTOs.exam.*;
 import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.user.User;
 import api.gabaritol.services.exam.ExamService;
@@ -20,8 +19,13 @@ public class ExamControllerImpl implements ExamController {
     @Override
     public ResponseEntity<ExamResponseDTO> create(CreateExamRequestDTO request, User currentUser) {
         Exam exam = examService.createDraft(
-            currentUser, request.title(), request.board(), request.topic(),
-            request.position(), request.difficulty(), request.questionCount()
+            currentUser, 
+            request.title(), 
+            request.board(), 
+            request.topic(),
+            request.position(), 
+            request.difficulty(), 
+            request.questionCount()
         );
         return ResponseEntity.ok(ExamResponseDTO.fromEntity(exam));
     }

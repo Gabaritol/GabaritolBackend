@@ -8,15 +8,15 @@ import api.gabaritol.DTOs.generation.GenerationJobResponseDTO;
 import api.gabaritol.DTOs.generation.StartGenerationResponseDTO;
 import api.gabaritol.entities.user.User;
 
+@RequestMapping("/api")
 public interface GenerationController {
-
-    @PostMapping("/api/exams/{examId}/generate")
+    @PostMapping("/exams/{examId}/generate")
     ResponseEntity<StartGenerationResponseDTO> generate(
         @PathVariable UUID examId,
         @AuthenticationPrincipal User currentUser
     );
 
-    @GetMapping("/api/generation-jobs/{jobId}")
+    @GetMapping("/generation-jobs/{jobId}")
     ResponseEntity<GenerationJobResponseDTO> getJobStatus(
         @PathVariable UUID jobId,
         @AuthenticationPrincipal User currentUser
