@@ -1,6 +1,8 @@
 package api.gabaritol.controllers.auth;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,15 +25,37 @@ public class AuthControllerImpl implements AuthController {
     }
 
     @Override
-    public ResponseEntity<ResponseLoginUserDTO> loginWithCode(VerifyCodeRequestDTO request) {
+    public ResponseEntity<Void> loginWithCode(VerifyCodeRequestDTO request) {
         ResponseLoginUserDTO response = authService.loginWithCode(request.email(), request.code());
-        return ResponseEntity.ok().body(response);
+
+        ResponseCookie cookie = ResponseCookie.from("auth_token", response.token())
+            .httpOnly(true)
+            .secure(false)
+            .path("/")
+            .maxAge(7 * 24 * 60 * 60)
+            .sameSite("Lax")
+            .build();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .build();
     }
 
     @Override
-    public ResponseEntity<ResponseLoginUserDTO> loginWithPassword(LoginPasswordRequestDTO request) {
+    public ResponseEntity<Void> loginWithPassword(LoginPasswordRequestDTO request) {
         ResponseLoginUserDTO response = authService.loginWithPassword(request.email(), request.password());
-        return ResponseEntity.ok().body(response);
+        
+        ResponseCookie cookie = ResponseCookie.from("auth_token", response.token())
+            .httpOnly(true)
+            .secure(false)
+            .path("/")
+            .maxAge(7 * 24 * 60 * 60)
+            .sameSite("Lax")
+            .build();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .build();
     }
 
     @Override

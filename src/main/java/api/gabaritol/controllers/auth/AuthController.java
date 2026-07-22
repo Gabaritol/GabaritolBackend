@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import api.gabaritol.DTOs.user.LoginCodeRequestDTO;
 import api.gabaritol.DTOs.user.LoginPasswordRequestDTO;
 import api.gabaritol.DTOs.user.RegisterRequestDTO;
-import api.gabaritol.DTOs.user.ResponseLoginUserDTO;
 import api.gabaritol.DTOs.user.VerifyCodeRequestDTO;
 import jakarta.validation.Valid;
 
@@ -21,8 +20,8 @@ public interface AuthController {
     ResponseEntity<Void> requestLoginCode(@Valid @RequestBody LoginCodeRequestDTO request);
 
     @PostMapping("/login/code")
-    ResponseEntity<ResponseLoginUserDTO> loginWithCode(@Valid @RequestBody VerifyCodeRequestDTO request);
+    ResponseEntity<Void> loginWithCode(@Valid @RequestBody VerifyCodeRequestDTO request);
 
     @PostMapping("/login/password")
-    ResponseEntity<ResponseLoginUserDTO> loginWithPassword(@Valid @RequestBody LoginPasswordRequestDTO request);
+    ResponseEntity<Void> loginWithPassword(@Valid @RequestBody LoginPasswordRequestDTO request);
 }
