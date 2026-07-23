@@ -23,7 +23,7 @@ public class QuestionGeneratorService {
     public GeneratedQuestionsBatchDTO generateQuestions(
         String topic, 
         String board, 
-        Difficulty difficulty,
+        Difficulty difficulty, 
         EducationLevel educationLevel,
         int quantity, 
         String referenceContent
@@ -45,11 +45,12 @@ public class QuestionGeneratorService {
         String topic, 
         String board, 
         Difficulty difficulty,
-        EducationLevel educationLevel,
+        EducationLevel educationLevel, 
         int quantity, 
         String referenceContent
     ) {
         StringBuilder prompt = new StringBuilder();
+
         prompt.append("Você é um gerador de questões educacionais em português do Brasil.\n");
         prompt.append("Contexto do público-alvo: ").append(describeEducationLevel(educationLevel)).append(".\n");
         prompt.append("Gere ").append(quantity).append(" questões de múltipla escolha ");
@@ -65,7 +66,6 @@ public class QuestionGeneratorService {
             prompt.append("Baseie as questões no seguinte material de referência:\n");
             prompt.append(referenceContent).append("\n");
         }
-
 
         prompt.append("""
             Responda APENAS com um JSON válido, sem nenhum texto adicional antes ou depois,
@@ -84,7 +84,20 @@ public class QuestionGeneratorService {
                 }
             ]
             }
-            """);
+
+            IMPORTANTE - regras de qualidade para as alternativas (evite questões óbvias):
+            1. Todas as alternativas devem ter comprimento e nível de detalhe SEMELHANTES entre si.
+            Nunca deixe a alternativa correta visivelmente mais longa, mais técnica ou mais completa que as demais.
+            2. Varie aleatoriamente a posição da resposta correta entre as questões (não deixe sempre em B ou C).
+            3. Os distratores (alternativas erradas) devem representar erros conceituais plausíveis e comuns
+            — como confusão entre conceitos parecidos, trocas de causa/efeito, ou pequenos deslizes técnicos —
+            nunca afirmações absurdas, contraditórias ou fáceis de descartar à primeira vista.
+            4. Evite palavras absolutas como "sempre", "nunca", "todos", "nenhum" nas alternativas,
+            a menos que também apareçam de forma equilibrada nas alternativas erradas.
+            5. Não repita palavras-chave do enunciado apenas na alternativa correta como "dica" indireta.
+            6. As alternativas erradas devem ser tentadoras para quem domina parcialmente o assunto,
+            não apenas obviamente falsas para quem não estudou nada.
+        """);
 
         return prompt.toString();
     }
