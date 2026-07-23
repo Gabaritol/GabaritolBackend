@@ -14,17 +14,12 @@ import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.exam.ExamStatus;
 import api.gabaritol.entities.generation.GenerationJob;
 import api.gabaritol.entities.generation.JobStatus;
-import api.gabaritol.entities.question.AnswerOption;
-import api.gabaritol.entities.question.ExamQuestion;
-import api.gabaritol.entities.question.Question;
-import api.gabaritol.entities.question.QuestionType;
+import api.gabaritol.entities.question.*;
 import api.gabaritol.entities.source.Source;
 import api.gabaritol.exceptions.raises.NotFoundException;
 import api.gabaritol.repositories.exam.ExamRepository;
 import api.gabaritol.repositories.generation.GenerationJobRepository;
-import api.gabaritol.repositories.question.AnswerOptionRepository;
-import api.gabaritol.repositories.question.ExamQuestionRepository;
-import api.gabaritol.repositories.question.QuestionRepository;
+import api.gabaritol.repositories.question.*;
 import api.gabaritol.repositories.source.SourceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -99,7 +94,10 @@ public class AsyncGenerationWorker {
                 String referenceContent = buildReferenceContent(exam);
 
                 GeneratedQuestionsBatchDTO batch = questionGeneratorService.generateQuestions(
-                    exam.getTopic(), exam.getBoard(), exam.getDifficulty(),
+                    exam.getTopic(), 
+                    exam.getBoard(), 
+                    exam.getDifficulty(), 
+                    exam.getEducationLevel(),
                     remaining, referenceContent
                 );
 

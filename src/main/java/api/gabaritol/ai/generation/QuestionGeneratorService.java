@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import api.gabaritol.ai.AIProvider;
 import api.gabaritol.ai.gemini.GeneratedQuestionsBatchDTO;
 import api.gabaritol.entities.exam.Difficulty;
+import api.gabaritol.entities.exam.EducationLevel;
 import api.gabaritol.exceptions.raises.AIProviderException;
 import lombok.RequiredArgsConstructor;
 import tools.jackson.databind.ObjectMapper;
@@ -23,11 +24,12 @@ public class QuestionGeneratorService {
         String topic, 
         String board, 
         Difficulty difficulty,
+        EducationLevel educationLevel,
         int quantity, 
         String referenceContent
     ) {
 
-        String prompt = buildPrompt(topic, board, difficulty, quantity, referenceContent);
+        String prompt = buildPrompt(topic, board, difficulty, educationLevel, quantity, referenceContent);
         String rawResponse = aiProvider.generateContent(prompt);
         String cleanJson = extractJson(rawResponse);
 
@@ -43,41 +45,57 @@ public class QuestionGeneratorService {
         String topic, 
         String board, 
         Difficulty difficulty,
+        EducationLevel educationLevel,
         int quantity, 
         String referenceContent
     ) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("Você é um gerador de questões para concursos públicos brasileiros.\n");
+        prompt.append("Você é um gerador de questões educacionais em português do Brasil.\n");
+        prompt.append("Contexto do público-alvo: ").append(describeEducationLevel(educationLevel)).append(".\n");
         prompt.append("Gere ").append(quantity).append(" questões de múltipla escolha ");
-        prompt.append("sobre o tema \"").append(topic).append("\", ");
-        prompt.append("no estilo da banca \"").append(board).append("\", ");
-        prompt.append("com nível de dificuldade ").append(difficulty).append(".\n");
+        prompt.append("sobre o tema \"").append(topic).append("\"");
+
+        if (board != null && !board.isBlank()) {
+            prompt.append(", no estilo de \"").append(board).append("\"");
+        }
+
+        prompt.append(", com nível de dificuldade ").append(difficulty).append(".\n");
 
         if (referenceContent != null && !referenceContent.isBlank()) {
             prompt.append("Baseie as questões no seguinte material de referência:\n");
             prompt.append(referenceContent).append("\n");
         }
 
+
         prompt.append("""
             Responda APENAS com um JSON válido, sem nenhum texto adicional antes ou depois,
             sem marcações de bloco de código (não use ```), seguindo EXATAMENTE este formato:
             {
-              "questions": [
+            "questions": [
                 {
-                  "statement": "texto do enunciado",
-                  "options": [
+                "statement": "texto do enunciado",
+                "options": [
                     {"label": "A", "text": "texto da alternativa", "correct": false},
                     {"label": "B", "text": "texto da alternativa", "correct": true},
                     {"label": "C", "text": "texto da alternativa", "correct": false},
                     {"label": "D", "text": "texto da alternativa", "correct": false}
-                  ],
-                  "explanation": "explicação do porquê a alternativa correta está certa"
+                ],
+                "explanation": "explicação do porquê a alternativa correta está certa"
                 }
-              ]
+            ]
             }
             """);
 
         return prompt.toString();
+    }
+
+    private String describeEducationLevel(EducationLevel level) {
+        return switch (level) {
+            case ELEMENTARY_SCHOOL -> "ensino fundamental, com linguagem simples e acessível para crianças/adolescentes";
+            case HIGH_SCHOOL -> "ensino médio, alinhado ao que é cobrado no ENEM e vestibulares";
+            case UNDERGRADUATE -> "graduação universitária, com profundidade técnica e terminologia acadêmica";
+            case PUBLIC_EXAM -> "concursos públicos brasileiros, seguindo o padrão de bancas organizadoras";
+        };
     }
 
     private String extractJson(String rawResponse) {
