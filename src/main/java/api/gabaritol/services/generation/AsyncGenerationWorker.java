@@ -64,13 +64,10 @@ public class AsyncGenerationWorker {
             int neededCount = exam.getQuestionCount();
 
             List<Question> reusableQuestions = questionRepository
-                .findByTopicAndBoardAndDifficultyAndApprovedTrueOrderByTimesUsedAsc(
-                    exam.getTopic(), 
-                    exam.getBoard(), 
-                    exam.getDifficulty(), 
-                    PageRequest.of(0, neededCount
-                )
-            );
+                .findByTopicAndBoardAndDifficultyAndEducationLevelAndApprovedTrueOrderByTimesUsedAsc(
+                    exam.getTopic(), exam.getBoard(), exam.getDifficulty(), exam.getEducationLevel(),
+                    PageRequest.of(0, neededCount)
+                );
 
             int reusableToUse = reusableQuestions.size();
                 
@@ -157,6 +154,7 @@ public class AsyncGenerationWorker {
         question.setBoard(exam.getBoard());
         question.setPosition(exam.getPosition());
         question.setDifficulty(exam.getDifficulty());
+        question.setEducationLevel(exam.getEducationLevel());
         question.setGeneratorModel("gemini-3.5-flash");
         question.setReviewed(false);
         question.setApproved(true);

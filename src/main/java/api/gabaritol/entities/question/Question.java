@@ -5,6 +5,7 @@ import java.util.UUID;
 
 import api.gabaritol.entities.common.BaseEntity;
 import api.gabaritol.entities.exam.Difficulty;
+import api.gabaritol.entities.exam.EducationLevel;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -32,6 +33,9 @@ public class Question extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     private QuestionType type;
+
+    @Enumerated(EnumType.STRING)
+    private EducationLevel educationLevel;
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<AnswerOption> options;

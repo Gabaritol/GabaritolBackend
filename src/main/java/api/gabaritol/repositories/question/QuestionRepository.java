@@ -6,22 +6,25 @@ import java.util.UUID;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import api.gabaritol.entities.exam.Difficulty;
+import api.gabaritol.entities.exam.EducationLevel;
 import api.gabaritol.entities.question.Question;
 
 public interface QuestionRepository extends JpaRepository<Question, UUID> {
 
-    List<Question> findByTopicAndBoardAndDifficultyAndApprovedTrueOrderByTimesUsedAsc(
+    List<Question> findByTopicAndBoardAndDifficultyAndEducationLevelAndApprovedTrueOrderByTimesUsedAsc(
         String topic, 
         String board, 
-        Difficulty difficulty, 
+        Difficulty difficulty,
+        EducationLevel educationLevel,
         Pageable pageable
     );
 
     boolean existsByContentHash(String contentHash);
 
-    long countByTopicAndBoardAndDifficultyAndApprovedTrue(
+    long countByTopicAndBoardAndDifficultyAndEducationLevelAndApprovedTrue(
         String topic, 
         String board, 
-        Difficulty difficulty
+        Difficulty difficulty,
+        EducationLevel educationLevel
     );
 }
