@@ -10,7 +10,6 @@ public record CreateExamRequestDTO(
     @NotBlank(message = "Title is required")
     String title,
 
-    @NotBlank(message = "Board is required")
     String board,
 
     @NotBlank(message = "Topic is required")

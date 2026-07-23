@@ -32,7 +32,7 @@ public class ExamServiceImpl implements ExamService {
         Exam exam = new Exam();
         exam.setUser(user);
         exam.setTitle(title);
-        exam.setBoard(normalize(board));
+        exam.setBoard(board != null ? normalize(board) : null);
         exam.setTopic(normalize(topic));
         exam.setPosition(position);
         exam.setDifficulty(difficulty);
