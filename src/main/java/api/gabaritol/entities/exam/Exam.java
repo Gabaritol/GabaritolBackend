@@ -40,6 +40,9 @@ public class Exam extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Difficulty difficulty;
 
+    @Enumerated(EnumType.STRING)
+    private EducationLevel educationLevel;
+
     private Integer questionCount;
 
     @Enumerated(EnumType.STRING)

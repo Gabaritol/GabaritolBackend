@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
 import api.gabaritol.entities.exam.Difficulty;
+import api.gabaritol.entities.exam.EducationLevel;
 import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.exam.ExamStatus;
 import api.gabaritol.entities.user.User;
@@ -24,7 +25,8 @@ public class ExamServiceImpl implements ExamService {
         String board, 
         String topic,
         String position, 
-        Difficulty difficulty, 
+        Difficulty difficulty,
+        EducationLevel educationLevel,
         Integer questionCount
     ) {
         Exam exam = new Exam();
@@ -34,6 +36,7 @@ public class ExamServiceImpl implements ExamService {
         exam.setTopic(normalize(topic));
         exam.setPosition(position);
         exam.setDifficulty(difficulty);
+        exam.setEducationLevel(educationLevel);
         exam.setQuestionCount(questionCount);
         exam.setStatus(ExamStatus.DRAFT);
         return examRepository.save(exam);

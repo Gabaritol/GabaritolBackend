@@ -24,7 +24,8 @@ public class ExamControllerImpl implements ExamController {
             request.board(), 
             request.topic(),
             request.position(), 
-            request.difficulty(), 
+            request.difficulty(),
+            request.educationLevel(),
             request.questionCount()
         );
         return ResponseEntity.ok(ExamResponseDTO.fromEntity(exam));
