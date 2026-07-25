@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.exam.ExamStatus;
 import api.gabaritol.entities.generation.GenerationJob;
 import api.gabaritol.entities.generation.JobStatus;
 import api.gabaritol.entities.user.User;
+import api.gabaritol.repositories.exam.ExamRepository;
 import api.gabaritol.repositories.generation.GenerationJobRepository;
 import api.gabaritol.repositories.user.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class DatabaseCleanupService {
 
     private final UserRepository userRepository;
     private final GenerationJobRepository generationJobRepository;
+    private final ExamRepository examRepository;
 
     @Scheduled(cron = "0 0 3 * * *")
     public void cleanupUnverifiedUsers() {
@@ -59,6 +63,17 @@ public class DatabaseCleanupService {
         if (!oldJobs.isEmpty()) {
             log.info("Deleting {} old finished generation jobs.", oldJobs.size());
             generationJobRepository.deleteAll(oldJobs);
+        }
+    }
+    
+    @Scheduled(cron = "0 0 4 * * *")
+    public void cleanupAbandonedDrafts() {
+        LocalDateTime cutoff = LocalDateTime.now().minusHours(24);
+        List<Exam> abandoned = examRepository.findByStatusAndCreatedAtBefore(ExamStatus.DRAFT, cutoff);
+
+        if (!abandoned.isEmpty()) {
+            log.info("Deleting {} abandoned draft exams older than 24h.", abandoned.size());
+            examRepository.deleteAll(abandoned);
         }
     }
 }
