@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import api.gabaritol.ai.gemini.GeneratedQuestionDTO;
 import api.gabaritol.ai.gemini.GeneratedQuestionsBatchDTO;
 import api.gabaritol.ai.generation.QuestionGeneratorService;
+import api.gabaritol.entities.billing.AIRole;
 import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.exam.ExamStatus;
 import api.gabaritol.entities.generation.GenerationJob;
@@ -21,6 +22,7 @@ import api.gabaritol.repositories.exam.ExamRepository;
 import api.gabaritol.repositories.generation.GenerationJobRepository;
 import api.gabaritol.repositories.question.*;
 import api.gabaritol.repositories.source.SourceRepository;
+import api.gabaritol.services.billing.BillingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -38,6 +40,7 @@ public class AsyncGenerationWorker {
     private final AnswerOptionRepository answerOptionRepository;
     private final ExamQuestionRepository examQuestionRepository;
     private final GenerationJobRepository generationJobRepository;
+    private final BillingService billingService;
 
     @Async
     public void process(UUID jobId, UUID examId) {
@@ -95,7 +98,8 @@ public class AsyncGenerationWorker {
                     exam.getBoard(), 
                     exam.getDifficulty(), 
                     exam.getEducationLevel(),
-                    remaining, referenceContent
+                    remaining,
+                    referenceContent
                 );
 
                 for (GeneratedQuestionDTO generated : batch.questions()) {
@@ -113,6 +117,9 @@ public class AsyncGenerationWorker {
                     job.setQuestionsGenerated(generatedCount);
                     generationJobRepository.save(job);
                 }
+
+                int actualCost = billingService.calculateCost("gemini-3.5-flash", AIRole.GENERATOR, remaining);
+                billingService.debitCredits(exam.getUser(), actualCost, exam);
             }
 
             exam.setStatus(ExamStatus.COMPLETED);
