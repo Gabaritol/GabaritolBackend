@@ -4,9 +4,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import api.gabaritol.entities.user.PlanType;
-import api.gabaritol.entities.user.Role;
-import api.gabaritol.entities.user.User;
+import api.gabaritol.entities.user.*;
 import api.gabaritol.repositories.user.UserRepository;
 import api.gabaritol.services.notification.EmailService;
 import api.gabaritol.util.TokenGenerator;
@@ -42,7 +40,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(email.substring(0, email.indexOf("@")));
         user.setRole(Role.USER);
         user.setPlan(PlanType.FREE);
-        user.setAvailableCredits(0);
+        user.setAvailableCredits(10);
 
         issueVerificationCode(user);
 
