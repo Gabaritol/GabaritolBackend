@@ -42,6 +42,7 @@ public class User extends BaseEntity {
     private PlanType plan;
 
     private Integer availableCredits;
+    private Integer referralBonusCap = 0;
 
     @OneToMany(mappedBy = "user")
     private List<Exam> exams;

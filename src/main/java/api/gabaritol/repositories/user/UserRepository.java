@@ -7,11 +7,14 @@ import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import api.gabaritol.entities.user.PlanType;
 import api.gabaritol.entities.user.User;
 
 public interface UserRepository extends JpaRepository<User, UUID> {
     Optional<User> findByEmail(String email);
     List<User> findByVerifiedFalseAndCreatedAtBefore(LocalDateTime cutoff);
+    List<User> findByPlan(PlanType plan);
+    List<User> findByPlanAndAvailableCreditsLessThan(PlanType plan, int threshold);
     boolean existsByEmail(String email);
     boolean existsByUsername(String username);
 }
