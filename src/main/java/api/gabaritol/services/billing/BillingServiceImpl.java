@@ -24,8 +24,6 @@ public class BillingServiceImpl implements BillingService {
     private final TransactionRepository transactionRepository;
     private final UserRepository userRepository;
 
-    private static final int BASE_CREDIT_CAP = 25;
-
     @Override
     public int calculateCost(String modelName, AIRole role, int questionCount) {
         CreditCostPerModel cost = creditCostPerModelRepository
@@ -61,7 +59,7 @@ public class BillingServiceImpl implements BillingService {
     @Override
     public UserCreditsResponseDTO getUserCredits(User user) {
         int bonusCap = user.getReferralBonusCap() != null ? user.getReferralBonusCap() : 0;
-        int maxCap = BASE_CREDIT_CAP + bonusCap;
+        int maxCap = BillingConstants.BASE_CREDIT_CAP + bonusCap;
         return new UserCreditsResponseDTO(user.getAvailableCredits(), maxCap);
     }
 
