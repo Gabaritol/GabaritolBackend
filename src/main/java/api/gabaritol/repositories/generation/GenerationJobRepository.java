@@ -15,4 +15,5 @@ public interface GenerationJobRepository extends JpaRepository<GenerationJob, UU
     List<GenerationJob> findByStatus(JobStatus status);
     List<GenerationJob> findByStatusAndStartedAtBefore(JobStatus status, LocalDateTime cutoff);
     List<GenerationJob> findByStatusInAndFinishedAtBefore(List<JobStatus> statuses, LocalDateTime cutoff);
+    void deleteByExam(Exam exam);
 }

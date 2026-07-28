@@ -6,8 +6,10 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import api.gabaritol.entities.billing.Transaction;
+import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.user.User;
 
 public interface TransactionRepository extends JpaRepository<Transaction, UUID> {
     List<Transaction> findByUserOrderByCreatedAtDesc(User user);
+    void nullifyRelatedExam(Exam exam);
 }

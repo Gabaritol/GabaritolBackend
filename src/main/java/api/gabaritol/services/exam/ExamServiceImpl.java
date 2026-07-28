@@ -9,6 +9,7 @@ import api.gabaritol.entities.exam.Exam;
 import api.gabaritol.entities.exam.ExamStatus;
 import api.gabaritol.entities.user.User;
 import api.gabaritol.exceptions.raises.NotFoundException;
+import api.gabaritol.repositories.billing.TransactionRepository;
 import api.gabaritol.repositories.exam.ExamRepository;
 import api.gabaritol.repositories.generation.GenerationJobRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class ExamServiceImpl implements ExamService {
 
     private final ExamRepository examRepository;
     private final GenerationJobRepository generationJobRepository;
+    private final TransactionRepository transactionRepository;
 
     @Override
     public Exam createDraft(
@@ -71,8 +73,8 @@ public class ExamServiceImpl implements ExamService {
     @Override
     public void deleteByIdAndUser(UUID id, User user) {
         Exam exam = findByIdAndUser(id, user);
-        //generationJobRepository.deleteByExam(exam);
-        //transactionRepository.nullifyRelatedExam(exam);
+        generationJobRepository.deleteByExam(exam);
+        transactionRepository.nullifyRelatedExam(exam);
         examRepository.delete(exam);
     }
 }
