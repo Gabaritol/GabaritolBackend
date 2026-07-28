@@ -2,6 +2,8 @@ package api.gabaritol.controllers.exam;
 
 import java.util.List;
 import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import api.gabaritol.DTOs.exam.*;
@@ -43,5 +45,11 @@ public class ExamControllerImpl implements ExamController {
     public ResponseEntity<ExamResponseDTO> getOne(UUID id, User currentUser) {
         Exam exam = examService.findByIdAndUser(id, currentUser);
         return ResponseEntity.ok(ExamResponseDTO.fromEntity(exam));
+    }
+
+    @Override
+    public ResponseEntity<Void> deleteOne(UUID id, User currentUser) {
+        examService.deleteByIdAndUser(id, currentUser);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

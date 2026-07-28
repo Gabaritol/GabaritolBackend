@@ -26,4 +26,11 @@ public interface ExamController {
         @PathVariable UUID id,
         @AuthenticationPrincipal User currentUser
     );
+
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteOne(
+        @PathVariable UUID id,
+        @AuthenticationPrincipal User currentUser
+    );
 }

@@ -21,4 +21,5 @@ public interface ExamService {
     List<Exam> findByUser(User user);
     Exam findById(UUID id);
     Exam findByIdAndUser(UUID id, User user);
+    void deleteByIdAndUser(UUID id, User user);
 }
