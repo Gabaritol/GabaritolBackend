@@ -3,6 +3,8 @@ package api.gabaritol.services.exam;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import api.gabaritol.entities.exam.Difficulty;
 import api.gabaritol.entities.exam.EducationLevel;
 import api.gabaritol.entities.exam.Exam;
@@ -71,6 +73,7 @@ public class ExamServiceImpl implements ExamService {
     }
 
     @Override
+    @Transactional
     public void deleteByIdAndUser(UUID id, User user) {
         Exam exam = findByIdAndUser(id, user);
         generationJobRepository.deleteByExam(exam);
