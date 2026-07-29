@@ -65,6 +65,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
+        if (user.isDeleted()) {
+            throw new IllegalStateException("This account has been deleted.");
+        }
+
         if (user.isVerificationCodeExpired()) {
             throw new IllegalStateException("Verification code expired. Request a new one.");
         }
@@ -93,6 +97,11 @@ public class UserServiceImpl implements UserService {
     public User loginWithPassword(String email, String rawPassword) {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
+
+        
+        if (user.isDeleted()) {
+            throw new IllegalStateException("This account has been deleted.");
+        }
 
         if (user.getPassword() == null) {
             throw new IllegalStateException("This account has no password set.");
