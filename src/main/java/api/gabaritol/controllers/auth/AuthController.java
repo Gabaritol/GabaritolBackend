@@ -1,6 +1,7 @@
 package api.gabaritol.controllers.auth;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,4 +25,7 @@ public interface AuthController {
 
     @PostMapping("/login/password")
     ResponseEntity<Void> loginWithPassword(@Valid @RequestBody LoginPasswordRequestDTO request);
+
+    @PostMapping("/logout")
+    ResponseEntity<Void> logout(@CookieValue(value = "auth_token", required = false) String token);
 }

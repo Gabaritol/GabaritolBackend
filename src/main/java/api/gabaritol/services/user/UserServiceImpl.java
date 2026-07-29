@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import api.gabaritol.entities.user.*;
 import api.gabaritol.repositories.user.UserRepository;
 import api.gabaritol.services.notification.EmailService;
@@ -118,5 +120,17 @@ public class UserServiceImpl implements UserService {
 
         user.setPlan(newPlan);
         return userRepository.save(user);
+    }
+    
+    @Override
+    @Transactional
+    public void deleteAccount(User user) {
+        user.setDeleted(true);
+        user.setDeletedAt(LocalDateTime.now());
+        user.setEmail("deleted_" + user.getId() + "@gabaritol.local");
+        user.setUsername("deleted_user");
+        user.setPassword(null);
+        user.setVerificationCode(null);
+        userRepository.save(user);
     }
 }

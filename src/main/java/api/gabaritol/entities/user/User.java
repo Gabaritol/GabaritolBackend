@@ -47,6 +47,9 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user")
     private List<Exam> exams;
 
+    private boolean deleted = false;
+    private LocalDateTime deletedAt;
+
     public void increaseVerificationAttempts() {
         this.verificationAttempts++;
     }

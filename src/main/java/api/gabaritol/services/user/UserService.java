@@ -11,4 +11,5 @@ public interface UserService {
     User verifyCode(String email, String submittedCode);
     User loginWithPassword(String email, String rawPassword);
     User upgradePlan(UUID userId, PlanType newPlan, String rawPassword);
+    void deleteAccount(User user);
 }

@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import api.gabaritol.DTOs.user.*;
 import api.gabaritol.services.auth.AuthService;
+import api.gabaritol.services.auth.TokenBlacklistService;
+import api.gabaritol.services.auth.TokenService;
 import api.gabaritol.services.user.UserService;
 import lombok.RequiredArgsConstructor;
 
@@ -17,6 +19,9 @@ public class AuthControllerImpl implements AuthController {
 
     private final AuthService authService;
     private final UserService userService;
+
+    private final TokenService tokenService;
+    private final TokenBlacklistService blacklistService;
     
     @Override
     public ResponseEntity<Void> register(RegisterRequestDTO request) {
@@ -62,5 +67,25 @@ public class AuthControllerImpl implements AuthController {
     public ResponseEntity<Void> requestLoginCode(LoginCodeRequestDTO request) {
         userService.requestLoginCode(request.email());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<Void> logout(String token) {
+        if (token != null) {
+            var decoded = tokenService.decode(token);
+            blacklistService.blacklist(decoded.getId(), decoded.getExpiresAt().toInstant());
+        }
+
+        ResponseCookie cookie = ResponseCookie.from("auth_token", "")
+            .httpOnly(true)
+            .secure(true)
+            .path("/")
+            .maxAge(0)
+            .sameSite("None")
+            .build();
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.SET_COOKIE, cookie.toString())
+            .build();
     }
 }
