@@ -9,6 +9,15 @@ services:
         ports:
             - "5432:5432"
 
+    cache:
+        image: redis/redis-stack:latest
+        container_name: gabaritol-redis
+        environment:
+            - REDIS_ARGS=--requirepass password
+        ports:
+            - "6379:6379"
+            - "8001:8001"
+
     app:
         build: .
         container_name: gabaritol-app
