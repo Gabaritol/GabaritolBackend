@@ -59,9 +59,8 @@ public class TokenService {
                     .build()
                     .verify(token);
 
-            String jti = decoded.getId();
-            if (blacklistService.isBlacklisted(jti)) {
-                log.warn("Token {} is blacklisted (logged out).", jti);
+            if (blacklistService.isBlacklisted(decoded.getId())) {
+                log.warn("Token {} is blacklisted (logged out).", decoded.getId());
                 return null;
             }
 
