@@ -98,7 +98,6 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
             .orElseThrow(() -> new IllegalArgumentException("User not found."));
 
-        
         if (user.isDeleted()) {
             throw new IllegalStateException("This account has been deleted.");
         }

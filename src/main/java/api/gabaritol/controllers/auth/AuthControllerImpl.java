@@ -12,9 +12,11 @@ import api.gabaritol.services.auth.TokenBlacklistService;
 import api.gabaritol.services.auth.TokenService;
 import api.gabaritol.services.user.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequiredArgsConstructor
+@Slf4j
 public class AuthControllerImpl implements AuthController {
 
     private final AuthService authService;
@@ -72,8 +74,12 @@ public class AuthControllerImpl implements AuthController {
     @Override
     public ResponseEntity<Void> logout(String token) {
         if (token != null) {
-            var decoded = tokenService.decode(token);
-            blacklistService.blacklist(decoded.getId(), decoded.getExpiresAt().toInstant());
+            try {
+                var decoded = tokenService.decode(token);
+                blacklistService.blacklist(decoded.getId(), decoded.getExpiresAt().toInstant());
+            } catch (Exception e) {
+                log.info("Expired Token eliminated");
+            }
         }
 
         ResponseCookie cookie = ResponseCookie.from("auth_token", "")
