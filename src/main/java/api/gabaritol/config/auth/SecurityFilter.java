@@ -28,19 +28,23 @@ public class SecurityFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(
-        @NonNull HttpServletRequest request,
-        @NonNull HttpServletResponse response,
-        @NonNull FilterChain filterChain
+            @NonNull HttpServletRequest request,
+            @NonNull HttpServletResponse response,
+            @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
         var token = this.recoverToken(request);
-        var userId = tokenService.validateToken(token);
 
-        if (userId != null) {
-            userRepository.findById(UUID.fromString(userId)).ifPresent(user -> {
-                var authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
-                var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            });
+        if (token != null) {
+            var userId = tokenService.validateToken(token);
+            if (userId != null) {
+                userRepository.findById(UUID.fromString(userId)).ifPresent(user -> {
+                    var authorities = Collections.singletonList(
+                        new SimpleGrantedAuthority("ROLE_" + user.getRole().name())
+                    );
+                    var authentication = new UsernamePasswordAuthenticationToken(user, null, authorities);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                });
+            }
         }
         filterChain.doFilter(request, response);
     }
