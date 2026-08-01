@@ -1,5 +1,7 @@
 package api.gabaritol.DTOs.admin;
 
-public record AdjustCreditsRequestDTO() {
-    
-}
+import jakarta.validation.constraints.NotNull;
+
+public record AdjustCreditsRequestDTO(
+    @NotNull Integer amount
+) {}
