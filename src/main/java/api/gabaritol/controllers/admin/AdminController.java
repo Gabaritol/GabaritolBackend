@@ -9,7 +9,6 @@ import jakarta.validation.Valid;
 
 @RequestMapping("/api/admin")
 public interface AdminController {
-
     @PostMapping("/credit-costs")
     ResponseEntity<CreditCostResponseDTO> createCreditCost(
         @Valid @RequestBody CreateCreditCostRequestDTO request
