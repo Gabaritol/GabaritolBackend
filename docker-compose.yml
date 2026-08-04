@@ -23,5 +23,10 @@ services:
         container_name: gabaritol-app
         depends_on:
             - db
+            - cache
+        environment:
+            - REDIS_HOST=cache
+            - REDIS_PORT=6379
+            - REDIS_PASSWORD=password
         ports:
             - "8080:8080"
