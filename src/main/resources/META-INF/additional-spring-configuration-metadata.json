@@ -3,52 +3,67 @@
         {
             "name": "app.cors.allowed-origins",
             "type": "java.lang.String",
-            "description": "Allowed origins for CORS requests. This property should be a comma-separated list of allowed origins."
+            "description": "Comma-separated list of allowed origins for CORS requests."
         },
         {
             "name": "api.security.token.secret",
             "type": "java.lang.String",
-            "description": "Secret key used for signing and verifying JWT tokens. This property should be set to a secure value."
+            "description": "Secret used to sign and verify JWT tokens for API authentication."
         },
         {
             "name": "spring.mail.host",
             "type": "java.lang.String",
-            "description": "SMTP server host address for sending emails (e.g., smtp.gmail.com, mail.example.com)"
+            "description": "SMTP server hostname used to send outgoing email."
         },
         {
             "name": "spring.mail.port",
             "type": "java.lang.String",
-            "description": "SMTP server port number for sending emails (e.g., 587 for TLS, 465 for SSL, 25 for plain text)"
+            "description": "SMTP server port number used for email delivery."
         },
         {
             "name": "spring.mail.username",
             "type": "java.lang.String",
-            "description": "Username for authentication with the SMTP server when sending mail."
+            "description": "Username for SMTP authentication when sending email."
         },
         {
             "name": "spring.mail.password",
             "type": "java.lang.String",
-            "description": "Password used to authenticate with the SMTP server when sending email. Keep this value secure and do not expose it in version control."
+            "description": "Password for SMTP authentication. Keep this value secure and do not commit it to source control."
         },
         {
             "name": "spring.mail.properties.mail.smtp.auth",
             "type": "java.lang.String",
-            "description": "Enable SMTP authentication for the mail server. Set to true when the SMTP server requires username/password login."
+            "description": "Enable SMTP authentication by setting this to true when the mail server requires login credentials."
         },
         {
             "name": "spring.mail.properties.mail.smtp.starttls.enable",
             "type": "java.lang.String",
-            "description": "Enable STARTTLS encryption for SMTP connections. Set to true to use TLS if the mail server supports it for secure email transport."
+            "description": "Enable STARTTLS for SMTP connections to secure email transport if supported by the server."
         },
         {
             "name": "gemini.api.key",
             "type": "java.lang.String",
-            "description": "API key used to authenticate requests to the Gemini service. Provide a valid key to enable secure, authorized access."
+            "description": "API key used to authenticate requests to the Gemini service."
         },
         {
             "name": "gemini.api.url",
             "type": "java.lang.String",
-            "description": "Base URL for the Gemini API endpoint. Set this to the service URL used by the application to communicate with Gemini."
+            "description": "Base URL for the Gemini API endpoint."
+        },
+        {
+            "name": "abacatepay.api.key",
+            "type": "java.lang.String",
+            "description": "API key used to authenticate requests to the AbacatePay service."
+        },
+        {
+            "name": "abacatepay.api.base-url",
+            "type": "java.lang.String",
+            "description": "Base URL for AbacatePay API requests."
+        },
+        {
+            "name": "abacatepay.webhook.secret",
+            "type": "java.lang.String",
+            "description": "Secret used to verify incoming AbacatePay webhook requests."
         }
     ]
 }
