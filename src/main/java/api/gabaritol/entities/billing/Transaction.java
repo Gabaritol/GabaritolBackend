@@ -36,4 +36,7 @@ public class Transaction extends BaseEntity {
 
     @ManyToOne
     private Exam relatedExam;
+
+    private String externalPaymentId;
+    private String paymentStatus;
 }
