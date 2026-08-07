@@ -1,4 +1,4 @@
-package api.gabaritol.payment.abacatepay;
+package api.gabaritol.payment.abacatepay.DTOs;
 
 import java.util.List;
 
