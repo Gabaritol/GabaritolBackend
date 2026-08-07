@@ -25,6 +25,13 @@ public class CustomExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
     }
 
+    @ExceptionHandler(PaymentException.class)
+    public ResponseEntity<Map<String, String>> paymentException(PaymentException cause) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", cause.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.SERVICE_UNAVAILABLE);
+    }
+
     @ExceptionHandler(InsufficientCreditsException.class)
     public ResponseEntity<Map<String, String>> insufficientCreditsException(InsufficientCreditsException cause) {
         Map<String, String> error = new HashMap<>();
