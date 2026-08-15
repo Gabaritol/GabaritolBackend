@@ -64,6 +64,11 @@
             "name": "abacatepay.webhook.secret",
             "type": "java.lang.String",
             "description": "Secret used to verify incoming AbacatePay webhook requests."
+        },
+        {
+            "name": "abacatepay.webhook.hmac-key",
+            "type": "java.lang.String",
+            "description": "description: HMAC key used to verify the integrity of incoming AbacatePay webhook requests."
         }
     ]
 }
